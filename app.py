@@ -3,7 +3,7 @@ import google.generativeai as genai
 from PIL import Image
 
 # 1. Menyiapkan API Key (Ganti dengan kunci Anda sendiri!)
-API_KEY = "AIzaSyDARG-4lWbj0KYi9ED7ZnkYchSxsRUG-cg"
+API_KEY = genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 genai.configure(api_key=API_KEY)
 
 # 2. Memilih otak AI (Gemini 2.5 flash sangat cepat untuk gambar)
@@ -44,4 +44,5 @@ if uploaded_file is not None:
                 st.write(response.text)
                 
             except Exception as e:
+
                 st.error(f"Terjadi kesalahan teknis: {e}")
