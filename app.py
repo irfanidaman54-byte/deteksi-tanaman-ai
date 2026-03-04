@@ -18,7 +18,7 @@ background-color: rgba(0,0,0,0);
 st.markdown(page_bg_img, unsafe_allow_html=True)
 # -------------------------------------
 import google.generativeai as genai
-from PIL import Image
+from streamlit_back_camera_input import back_camera_input
 
 # 2. Menyiapkan API Key dari brankas Streamlit
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
@@ -40,7 +40,8 @@ st.write("### Masukkan Foto Daun")
 gambar_daun = None
 
 if pilihan == "📷 Ambil Foto dari Kamera":
-    gambar_daun = st.camera_input("Arahkan kamera ke daun yang jelas")
+    st.info("💡 Arahkan ke daun, lalu **KETUK AREA VIDEO** untuk memotret!")
+    gambar_daun = back_camera_input()
 else:
     gambar_daun = st.file_uploader("Pilih file foto dari galeri Anda", type=['jpg', 'jpeg', 'png'])
 
@@ -77,6 +78,7 @@ if gambar_daun is not None:
             except Exception as e:
                 # Jika ada error (misal internet putus atau API key bermasalah)
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
