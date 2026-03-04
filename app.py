@@ -40,7 +40,6 @@ if gambar_daun is not None:
     st.image(image, caption="Foto Tanaman Anda", use_container_width=True)
     
    # Tombol Analisis 
-   # Contoh saat tombol diklik
     if st.button("Analisis Daun Ini"):
     with st.spinner("AI sedang mengamati daun dengan teliti... 🔍"):
 
@@ -72,6 +71,7 @@ if gambar_daun is not None:
             except Exception as e:
 
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
