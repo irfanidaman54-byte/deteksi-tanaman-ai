@@ -1,7 +1,22 @@
 import streamlit as st
 # 1. Konfigurasi Halaman (HARUS selalu di paling atas setelah import streamlit)
 st.set_page_config(page_title="Dokter Tanaman AI", page_icon="🌿", layout="centered")
-
+# --- Menambahkan Gambar Background ---
+# Ganti URL di bawah dengan link gambar pilihan Anda
+page_bg_img = https://plus.unsplash.com/premium_photo-1672419013359-3e0a2f9c039a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z2FtYmFyJTIwZGF1bnxlbnwwfHwwfHx8MA%3D%3D
+<style>
+[data-testid="stAppViewContainer"] {
+background-image: url("https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1000&auto=format&fit=crop");
+background-size: cover;
+background-position: center;
+}
+[data-testid="stHeader"] {
+background-color: rgba(0,0,0,0);
+}
+</style>
+"""
+st.markdown(page_bg_img, unsafe_allow_html=True)
+# -------------------------------------
 import google.generativeai as genai
 from PIL import Image
 
@@ -62,6 +77,7 @@ if gambar_daun is not None:
             except Exception as e:
                 # Jika ada error (misal internet putus atau API key bermasalah)
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
