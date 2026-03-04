@@ -14,8 +14,25 @@ st.title("🌱 Pendeteksi Kesuburan Tanaman AI")
 st.write("Unggah foto daun atau tanaman Anda, dan biarkan AI menganalisis kesehatannya!")
 
 # Tempat upload foto
-uploaded_file = st.file_uploader("Upload Foto Tanaman (JPG/PNG)", type=["jpg", "png", "jpeg"])
+# Tambahkan ini di bagian tempat Anda meminta gambar
+st.write("### Masukkan Foto Daun")
+pilihan = st.radio("Pilih metode:", ("📷 Ambil Foto dari Kamera", "📂 Unggah dari Galeri"))
 
+# Menyiapkan variabel kosong untuk menyimpan gambar
+gambar_daun = None
+
+if pilihan == "📷 Ambil Foto dari Kamera":
+    gambar_daun = st.camera_input("Arahkan kamera ke daun yang jelas")
+else:
+    gambar_daun = st.file_uploader("Pilih file foto dari galeri Anda", type=['jpg', 'jpeg', 'png'])
+
+# Bagian bawah ini adalah kode AI Anda yang sudah ada
+if gambar_daun is not None:
+    # Membuka gambar
+    image = Image.open(gambar_daun)
+    st.image(image, caption="Gambar yang akan dianalisis", use_container_width=True)
+    
+    # ... (Di bawah ini lanjutkan dengan kode AI Anda saat tombol analisis ditekan) ...
 if uploaded_file is not None:
     # Buka gambar yang diunggah
     image = Image.open(uploaded_file)
@@ -46,3 +63,4 @@ if uploaded_file is not None:
             except Exception as e:
 
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
