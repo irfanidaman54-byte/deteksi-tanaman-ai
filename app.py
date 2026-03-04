@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_page_config(page_title="Dokter Tanaman AI", page_icon="🌿", layout="centered")
 import google.generativeai as genai
 from PIL import Image
 
@@ -16,7 +17,7 @@ st.write("Unggah foto daun atau tanaman Anda, dan biarkan AI menganalisis keseha
 # Tempat upload foto
 # Tambahkan ini di bagian tempat Anda meminta gambar
 st.write("### Masukkan Foto Daun")
-pilihan = st.radio("Pilih metode:", ("📷 Ambil Foto dari Kamera", "📂 Unggah dari Galeri"))
+pilihan = st.sidebar.radio("Pilih metode:", ("📷 Ambil Foto dari Kamera", "📂 Unggah dari Galeri"))
 
 # Menyiapkan variabel kosong untuk menyimpan gambar
 gambar_daun = None
@@ -39,9 +40,15 @@ if gambar_daun is not None:
     st.image(image, caption="Foto Tanaman Anda", use_container_width=True)
     
     # Tombol Analisis
-    if st.button("Analisis dengan AI"):
-        # Munculkan animasi loading saat AI berpikir
-        with st.spinner("AI sedang mengamati tanaman Anda... 🧠"):
+    if st.button("Analisis Daun Ini"):
+    with st.spinner("AI sedang mengamati daun dengan teliti... 🔍"):
+
+        # ---> (Kode AI Anda memproses gambar di sini) <---
+
+        st.success("Analisis selesai!")
+        st.balloons() # Memunculkan animasi balon terbang
+
+        # ---> (Kode st.write() untuk memunculkan jawaban AI) <---:
             try:
                 # Ini adalah instruksi rahasia kita untuk AI (Prompting)
                 instruksi = """
@@ -50,6 +57,7 @@ if gambar_daun is not None:
                 1. Apakah tanaman ini terlihat sehat?
                 2. Apakah ada tanda-tanda kekurangan nutrisi, hama, atau penyakit?
                 3. Berikan 3 saran perawatan praktis untuk tanaman ini.
+                4. Berikan saran pupuk apa yang dibutuhkan tanaman ini.
                 Gunakan bahasa Indonesia yang ramah dan mudah dipahami.
                 """
                 
@@ -63,6 +71,7 @@ if gambar_daun is not None:
             except Exception as e:
 
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
