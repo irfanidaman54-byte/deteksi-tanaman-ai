@@ -6,7 +6,7 @@ st.set_page_config(page_title="Dokter Tanaman AI", page_icon="🌿", layout="cen
 page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"] {
-background-image: url("https://plus.unsplash.com/premium_photo-1672419013359-3e0a2f9c039a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z2FtYmFyJTIwZGF1bnxlbnwwfHwwfHx8MA%3D%3D");
+background-image: url("");
 background-size: cover;
 background-position: center;
 }
@@ -77,6 +77,7 @@ if gambar_daun is not None:
             except Exception as e:
                 # Jika ada error (misal internet putus atau API key bermasalah)
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
