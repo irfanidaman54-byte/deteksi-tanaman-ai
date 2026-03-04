@@ -75,10 +75,23 @@ if gambar_daun is not None:
                 st.success("Analisis Selesai!")
                 st.balloons()
                 st.write(response.text)
+                # Menampilkan jawaban AI ke layar web dan memunculkan balon
+                st.success("Analisis Selesai!")
+                st.balloons()
+                st.write(response.text)
+                
+                # --- TAMBAHAN TOMBOL KEMBALI ---
+                st.write("---") # Ini akan membuat garis pembatas horizontal
+                if st.button("🔄 Cek Tanaman Lain"):
+                    st.rerun() # Perintah untuk menyegarkan/me-restart halaman web
                 
             except Exception as e:
                 # Jika ada error (misal internet putus atau API key bermasalah)
                 st.error(f"Terjadi kesalahan teknis: {e}")
+            except Exception as e:
+                # Jika ada error (misal internet putus atau API key bermasalah)
+                st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
