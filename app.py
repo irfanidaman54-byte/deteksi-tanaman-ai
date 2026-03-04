@@ -18,6 +18,7 @@ background-color: rgba(0,0,0,0);
 st.markdown(page_bg_img, unsafe_allow_html=True)
 # -------------------------------------
 import google.generativeai as genai
+from PIL import Image
 from streamlit_back_camera_input import back_camera_input
 
 # 2. Menyiapkan API Key dari brankas Streamlit
@@ -78,6 +79,7 @@ if gambar_daun is not None:
             except Exception as e:
                 # Jika ada error (misal internet putus atau API key bermasalah)
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
