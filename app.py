@@ -1,63 +1,60 @@
 import streamlit as st
-# 1. Konfigurasi Halaman (HARUS selalu di paling atas setelah import streamlit)
 st.set_page_config(page_title="Dokter Tanaman AI", page_icon="🌿", layout="centered")
-# --- Menambahkan Gambar Background ---
-# Ganti URL di bawah dengan link gambar pilihan Anda
-page_bg_img = """
-<style>
-[data-testid="stAppViewContainer"] {
-background-image: url("");
-background-size: cover;
-background-position: center;
-}
-[data-testid="stHeader"] {
-background-color: rgba(0,0,0,0);
-}
-</style>
-"""
-st.markdown(page_bg_img, unsafe_allow_html=True)
-# -------------------------------------
+
 import google.generativeai as genai
 from PIL import Image
 from streamlit_back_camera_input import back_camera_input
 
-# 2. Menyiapkan API Key dari brankas Streamlit
+# 1. Konfigurasi API
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-
-# 3. Memilih otak AI (Gemini Flash)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-# 4. Tampilan Halaman Web
+# 2. Tampilan Halaman Web
 st.title("🌱 Pendeteksi Kesuburan Tanaman AI")
 st.write("Unggah foto daun atau tanaman Anda, dan biarkan AI menganalisis kesehatannya!")
 
-# 5. Menu Samping (Sidebar) untuk Pilihan Input
-st.sidebar.write("### Pengaturan")
-pilihan = st.sidebar.radio("Pilih metode masukan:", ("📷 Ambil Foto dari Kamera", "📂 Unggah dari Galeri"))
+# --- 3. SISTEM MEMORI UNTUK MENGHEMAT LAYAR ---
+# Membuat kotak memori kosong jika belum ada
+if "foto_tersimpan" not in st.session_state:
+    st.session_state.foto_tersimpan = None
 
-st.write("### Masukkan Foto Daun")
+# KONDISI A: JIKA BELUM ADA FOTO DI MEMORI (Tampilkan Kamera/Galeri)
+if st.session_state.foto_tersimpan is None:
+    st.sidebar.write("### Pengaturan")
+    pilihan = st.sidebar.radio("Pilih metode masukan:", ("📷 Ambil Foto dari Kamera", "📂 Unggah dari Galeri"))
 
-# Menyiapkan variabel kosong untuk menyimpan gambar
-gambar_daun = None
+    st.write("### Masukkan Foto Daun")
+    if pilihan == "📷 Ambil Foto dari Kamera":
+        st.info("💡 Arahkan ke daun, lalu **KETUK AREA VIDEO** untuk memotret!")
+        gambar_baru = back_camera_input()
+        
+        # Jika foto berhasil diketuk/diambil, simpan ke memori lalu restart halaman
+        if gambar_baru is not None:
+            st.session_state.foto_tersimpan = gambar_baru
+            st.rerun() 
+            
+    else:
+        gambar_baru = st.file_uploader("Pilih file foto dari galeri Anda", type=['jpg', 'jpeg', 'png'])
+        if gambar_baru is not None:
+            st.session_state.foto_tersimpan = gambar_baru
+            st.rerun()
 
-if pilihan == "📷 Ambil Foto dari Kamera":
-    st.info("💡 Arahkan ke daun, lalu **KETUK AREA VIDEO** untuk memotret!")
-    gambar_daun = back_camera_input()
+# KONDISI B: JIKA FOTO SUDAH ADA DI MEMORI (Sembunyikan Kamera, Tampilkan Hasil)
 else:
-    gambar_daun = st.file_uploader("Pilih file foto dari galeri Anda", type=['jpg', 'jpeg', 'png'])
-
-# 6. Memproses Gambar dan Analisis AI
-if gambar_daun is not None:
-    # Membuka dan menampilkan gambar di layar
+    # Memanggil foto dari memori
+    gambar_daun = st.session_state.foto_tersimpan
     image = Image.open(gambar_daun)
     st.image(image, caption="Foto Tanaman Anda", use_container_width=True)
-    
-    # Tombol Analisis
+
+    # Tombol praktis jika foto buram dan ingin diulang
+    if st.button("❌ Ganti Foto"):
+        st.session_state.foto_tersimpan = None # Kosongkan memori
+        st.rerun() # Restart halaman untuk memunculkan kamera lagi
+
+    # --- 4. Proses Analisis AI ---
     if st.button("Analisis Sekarang"):
-        # Animasi Loading
         with st.spinner("AI sedang mengamati daun dengan teliti... 🔍"):
             try:
-                # Instruksi rahasia kita untuk AI (Prompting)
                 instruksi = """
                 Kamu adalah seorang ahli pertanian dan botani. 
                 Tolong analisis foto tanaman ini. Beritahu saya:
@@ -68,42 +65,17 @@ if gambar_daun is not None:
                 Gunakan bahasa Indonesia yang ramah dan mudah dipahami.
                 """
                 
-                # Mengirim gambar dan instruksi ke AI
                 response = model.generate_content([instruksi, image])
                 
-                # Menampilkan jawaban AI ke layar web dan memunculkan balon
-                st.success("Analisis Selesai!")
-                st.balloons()
-                st.write(response.text)
-                # Menampilkan jawaban AI ke layar web dan memunculkan balon
                 st.success("Analisis Selesai!")
                 st.balloons()
                 st.write(response.text)
                 
-                # --- TAMBAHAN TOMBOL KEMBALI ---
-                st.write("---") # Ini akan membuat garis pembatas horizontal
+                # Tombol Kembali / Cek Tanaman Lain
+                st.write("---") 
                 if st.button("🔄 Cek Tanaman Lain"):
-                    st.rerun() # Perintah untuk menyegarkan/me-restart halaman web
-                
+                    st.session_state.foto_tersimpan = None # Kosongkan memori
+                    st.rerun() 
+                    
             except Exception as e:
-                # Jika ada error (misal internet putus atau API key bermasalah)
                 st.error(f"Terjadi kesalahan teknis: {e}")
-            except Exception as e:
-                # Jika ada error (misal internet putus atau API key bermasalah)
-                st.error(f"Terjadi kesalahan teknis: {e}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
