@@ -3,10 +3,10 @@ import streamlit as st
 st.set_page_config(page_title="Dokter Tanaman AI", page_icon="🌿", layout="centered")
 # --- Menambahkan Gambar Background ---
 # Ganti URL di bawah dengan link gambar pilihan Anda
-page_bg_img = https://plus.unsplash.com/premium_photo-1672419013359-3e0a2f9c039a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z2FtYmFyJTIwZGF1bnxlbnwwfHwwfHx8MA%3D%3D
+page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"] {
-background-image: url("https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1000&auto=format&fit=crop");
+background-image: url("https://plus.unsplash.com/premium_photo-1672419013359-3e0a2f9c039a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z2FtYmFyJTIwZGF1bnxlbnwwfHwwfHx8MA%3D%3D");
 background-size: cover;
 background-position: center;
 }
