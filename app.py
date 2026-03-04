@@ -40,13 +40,11 @@ if gambar_daun is not None:
     st.image(image, caption="Foto Tanaman Anda", use_container_width=True)
     
    # Tombol Analisis 
-   if st.button("Analisis Daun Ini"):
-       with st.spinner("AI sedang mengamati daun dengan teliti... 🔍"):
-
-        # ---> (Kode AI Anda memproses gambar di sini) <---
-
-        st.success("Analisis selesai!")
-        st.balloons() # Memunculkan animasi balon terbang
+ if st.button("Analisis Sekarang"):
+    with st.spinner("AI sedang mengamati daun... 🔍"):
+        # Kode AI memproses gambar ada di sini (geser ke kanan lagi)
+        st.success("Selesai!")
+        st.balloons()
 
         # ---> (Kode st.write() untuk memunculkan jawaban AI) <---:
             try:
@@ -71,6 +69,7 @@ if gambar_daun is not None:
             except Exception as e:
 
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
