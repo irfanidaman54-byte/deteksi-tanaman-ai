@@ -35,7 +35,7 @@ if gambar_daun is not None:
     # ... (Di bawah ini lanjutkan dengan kode AI Anda saat tombol analisis ditekan) ...
 if uploaded_file is not None:
     # Buka gambar yang diunggah
-    image = Image.open(uploaded_file)
+    image = Image.open(gambar_daun)
     st.image(image, caption="Foto Tanaman Anda", use_container_width=True)
     
     # Tombol Analisis
@@ -63,4 +63,5 @@ if uploaded_file is not None:
             except Exception as e:
 
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
