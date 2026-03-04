@@ -1,23 +1,25 @@
 import streamlit as st
+# 1. Konfigurasi Halaman (HARUS selalu di paling atas setelah import streamlit)
 st.set_page_config(page_title="Dokter Tanaman AI", page_icon="🌿", layout="centered")
+
 import google.generativeai as genai
 from PIL import Image
 
-# 1. Menyiapkan API Key (Ganti dengan kunci Anda sendiri!)
-API_KEY = genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-genai.configure(api_key=API_KEY)
+# 2. Menyiapkan API Key dari brankas Streamlit
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
-# 2. Memilih otak AI (Gemini 2.5 flash sangat cepat untuk gambar)
+# 3. Memilih otak AI (Gemini Flash)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-# 3. Tampilan Halaman Web
+# 4. Tampilan Halaman Web
 st.title("🌱 Pendeteksi Kesuburan Tanaman AI")
 st.write("Unggah foto daun atau tanaman Anda, dan biarkan AI menganalisis kesehatannya!")
 
-# Tempat upload foto
-# Tambahkan ini di bagian tempat Anda meminta gambar
+# 5. Menu Samping (Sidebar) untuk Pilihan Input
+st.sidebar.write("### Pengaturan")
+pilihan = st.sidebar.radio("Pilih metode masukan:", ("📷 Ambil Foto dari Kamera", "📂 Unggah dari Galeri"))
+
 st.write("### Masukkan Foto Daun")
-pilihan = st.sidebar.radio("Pilih metode:", ("📷 Ambil Foto dari Kamera", "📂 Unggah dari Galeri"))
 
 # Menyiapkan variabel kosong untuk menyimpan gambar
 gambar_daun = None
@@ -27,28 +29,18 @@ if pilihan == "📷 Ambil Foto dari Kamera":
 else:
     gambar_daun = st.file_uploader("Pilih file foto dari galeri Anda", type=['jpg', 'jpeg', 'png'])
 
-# Bagian bawah ini adalah kode AI Anda yang sudah ada
+# 6. Memproses Gambar dan Analisis AI
 if gambar_daun is not None:
-    # Membuka gambar
-    image = Image.open(gambar_daun)
-    st.image(image, caption="Gambar yang akan dianalisis", use_container_width=True)
-    
-    # ... (Di bawah ini lanjutkan dengan kode AI Anda saat tombol analisis ditekan) ...
-if gambar_daun is not None:
-    # Buka gambar yang diunggah
+    # Membuka dan menampilkan gambar di layar
     image = Image.open(gambar_daun)
     st.image(image, caption="Foto Tanaman Anda", use_container_width=True)
     
-   # Tombol Analisis 
- if st.button("Analisis Sekarang"):
-    with st.spinner("AI sedang mengamati daun... 🔍"):
-        # Kode AI memproses gambar ada di sini (geser ke kanan lagi)
-        st.success("Selesai!")
-        st.balloons()
-
-        # ---> (Kode st.write() untuk memunculkan jawaban AI) <---:
+    # Tombol Analisis
+    if st.button("Analisis Sekarang"):
+        # Animasi Loading
+        with st.spinner("AI sedang mengamati daun dengan teliti... 🔍"):
             try:
-                # Ini adalah instruksi rahasia kita untuk AI (Prompting)
+                # Instruksi rahasia kita untuk AI (Prompting)
                 instruksi = """
                 Kamu adalah seorang ahli pertanian dan botani. 
                 Tolong analisis foto tanaman ini. Beritahu saya:
@@ -62,13 +54,15 @@ if gambar_daun is not None:
                 # Mengirim gambar dan instruksi ke AI
                 response = model.generate_content([instruksi, image])
                 
-                # Menampilkan jawaban AI ke layar web
+                # Menampilkan jawaban AI ke layar web dan memunculkan balon
                 st.success("Analisis Selesai!")
+                st.balloons()
                 st.write(response.text)
                 
             except Exception as e:
-
+                # Jika ada error (misal internet putus atau API key bermasalah)
                 st.error(f"Terjadi kesalahan teknis: {e}")
+
 
 
 
